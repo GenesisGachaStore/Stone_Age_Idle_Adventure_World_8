@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stone Age: Idle Adventure Catalog</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+  
+  body { background-color: #000000; color: #fff; padding: 15px; display: flex; flex-direction: column; align-items: center;  }
+  .discord-bar { width: 100%; max-width: 1080px; background: linear-gradient(90deg, #1b1f3b 0%, #5865F2 50%, #1b1f3b 100%); border: 1.5px solid #8ea1e1; border-radius: 10px; padding: 10px 16px; margin-bottom: 12px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; box-shadow: 0 4px 15px rgba(88, 101, 242, 0.45); text-align: center; }
+  .discord-text { font-size: 14px; font-weight: bold; color: #ffffff; letter-spacing: 0.4px; }
+  .discord-tag { background: rgba(0, 0, 0, 0.45); color: #ffe680; font-weight: 800; font-size: 14px; padding: 4px 10px; border-radius: 5px; border: 1px solid rgba(255, 255, 255, 0.25); user-select: all; }
+  .copy-discord-btn { background: #ffcc00; color: #111; border: none; border-radius: 5px; padding: 5px 11px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; transition: 0.15s; }
+  .copy-discord-btn:hover { background: #ffffff; transform: scale(1.04); }
+  .bleach-panel { width: 100%; max-width: 1080px; background: radial-gradient(circle at 50% 0%, #3b1c5e 0%, #190d2b 60%, #0e0917 100%); border: 2px solid #8a4fd1; border-radius: 12px; padding: 22px 18px 18px 18px; margin-bottom: 14px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 25px rgba(138, 79, 209, 0.35); display: flex; flex-direction: column; align-items: center; }
+  .bleach-title { font-size: 30px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; text-align: center; background: linear-gradient(180deg, #ffffff 10%, #ffd24d 55%, #ff6600 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 3px 12px rgba(255, 102, 0, 0.7)); margin-bottom: 6px; }
+  .bleach-subtitle { font-size: 12px; font-weight: bold; letter-spacing: 2px; color: #d8bff8; background: rgba(0, 0, 0, 0.35); padding: 4px 14px; border-radius: 20px; border: 1px solid rgba(155, 102, 223, 0.3); text-transform: uppercase; margin-bottom: 16px; text-align: center; }
+  .heroes-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 9px; width: 100%; max-width: 1060px; }
+  .hero-card { background: linear-gradient(180deg, #a792d1 0%, #7d66ad 100%); border: 1.5px solid #35274d; border-radius: 6px; overflow: hidden; cursor: pointer; display: flex; flex-direction: column; align-items: center; user-select: none; box-shadow: 0 3px 6px rgba(0,0,0,0.45); transition: 0.15s; }
+  .hero-card:hover { border-color: #e0c3fc; transform: translateY(-2px); }
+  .hero-card.active { border-color: #ffcc00; box-shadow: 0 0 14px rgba(255, 204, 0, 0.95); transform: translateY(-2px) scale(1.02); }
+  .hero-card img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+  @keyframes cbGlow {
+    0%, 100% { border-color: #d8bff8; box-shadow: 0 0 6px rgba(192, 132, 252, 0.6), inset 0 0 4px rgba(192, 132, 252, 0.4); }
+    50% { border-color: #ffcc00; box-shadow: 0 0 14px rgba(255, 204, 0, 0.95), inset 0 0 6px rgba(255, 204, 0, 0.6); }
+  }
+  .cb-area { width: 100%; padding: 6px 0; display: flex; justify-content: center; background: #26173d; border-top: 1.5px solid #482d70; transition: 0.15s; }
+  .hero-card:hover .cb-area { background: #342052; }
+  .hero-card.active .cb-area { background: #3d2400; border-top-color: #ffcc00; }
+  .cb { width: 22px; height: 22px; border: 2px solid #d8bff8; background: #140b24; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 16px; color: #111; animation: cbGlow 1.6s infinite ease-in-out; transition: 0.15s; }
+  .hero-card:hover .cb { border-color: #ffffff; transform: scale(1.08); }
+  .hero-card.active .cb { background: #ffcc00; border-color: #ffffff; box-shadow: 0 0 16px #ffcc00, 0 0 24px #ff8800; animation: none; }
+  .hero-card.active .cb::after { content: "✔"; }
+  .status { width: 100%; max-width: 1080px; display: flex; justify-content: center; align-items: center; gap: 12px; padding: 10px 16px; margin-bottom: 16px; background: linear-gradient(90deg, #160c24 0%, #24133b 50%, #160c24 100%); border: 1px solid #5c338f; border-radius: 8px; font-size: 14px; font-weight: bold; color: #e6d4ff; }
+  .reset-btn { background: #ffcc00; color: #140a21; border: none; border-radius: 4px; padding: 4px 10px; font-size: 12px; font-weight: 800; text-transform: uppercase; cursor: pointer; }
+  .reset-btn:hover { background: #ffffff; }
+  @keyframes blinkBorder { 0%, 100% { border-color: #666666; box-shadow: 0 0 6px rgba(255, 204, 0, 0.2); } 50% { border-color: #ffcc00; box-shadow: 0 0 18px rgba(255, 204, 0, 0.85); } }
+  @keyframes blinkAccount { 0%, 100% { color: #ffcc00; text-shadow: 0 0 8px rgba(255, 204, 0, 0.8); } 50% { color: #ffffff; text-shadow: 0 0 18px #ffcc00, 0 0 28px #ff8800; } }
+  .accounts { width: 100%; max-width: 1080px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: start; }
+  .acc { background: #181818; border: 2px solid #ffcc00; border-radius: 6px; padding: 0; overflow: hidden; animation: blinkBorder 1.5s infinite ease-in-out; }
+  .drive-btn { display: block; width: 100%; text-align: center; background: linear-gradient(90deg, #3b1e5e 0%, #6833a8 50%, #3b1e5e 100%); color: #ffe680; font-weight: bold; font-size: 11px; padding: 7px 6px; letter-spacing: 0.8px; text-transform: uppercase; text-decoration: none; padding: 9px 12px; border-bottom: 1px solid #5a5a5a; transition: 0.2s; }
+  .drive-btn:hover { background: linear-gradient(90deg, #522982 0%, #8744d6 50%, #522982 100%); color: #ffffff; }
+  .acc-title { font-size: 15px; padding: 7px; font-weight: bold; color: #ffcc00; background: #262626; padding: 10px; border-bottom: 2px solid #5a5a5a; margin: 0; text-align: center; animation: blinkAccount 1.2s infinite ease-in-out; }
+  .acc img { width: 100%; display: block; padding: 8px; background: #141414; }
+  .img-crop-box { width: 100%; max-height: 580px; overflow: hidden; position: relative; background: #141414; transition: max-height 0.35s ease; }
+  .img-crop-box.expanded { max-height: 2500px; }
+  .img-fade { position: absolute; bottom: 0; left: 0; right: 0; height: 35px; background: linear-gradient(to bottom, transparent, #181818); pointer-events: none; }
+  .img-crop-box.expanded .img-fade { display: none; }
+  .toggle-wrap { display: flex; justify-content: center; padding: 10px; background: #1c1c1c; border-top: 1px solid #333; }
+  .toggle-btn { background: linear-gradient(90deg, #3b1e5e 0%, #6833a8 50%, #3b1e5e 100%); color: #ffe680; border: 1.5px solid #9b66df; border-radius: 5px; padding: 8px 18px; font-size: 13px; font-weight: bold; letter-spacing: 0.6px; text-transform: uppercase; cursor: pointer; transition: 0.2s; }
+  .toggle-btn:hover { background: linear-gradient(90deg, #522982 0%, #8744d6 50%, #522982 100%); color: #ffffff; }
+  @media (max-width: 768px) { .accounts { grid-template-columns: 1fr; } .heroes-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; } .bleach-title { font-size: 20px; letter-spacing: 1.5px; } .img-crop-box { max-height: none !important; height: auto !important; overflow: hidden !important; border-radius: 8px; } .img-crop-box.expanded { max-height: 2500px !important; } }
+
+
+/* MATCHED HEROES START */
+  .matched-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: linear-gradient(90deg, #1b0f2e 0%, #2d184d 50%, #1b0f2e 100%);
+    border-bottom: 1.5px solid #ffcc00;
+  }
+  .matched-label {
+    font-size: 11.5px;
+    font-weight: 900;
+    color: #ffe680;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-right: 4px;
+  }
+  .matched-hero-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid #ffcc00;
+    border-radius: 6px;
+    padding: 3px 8px 3px 3px;
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.75);
+  }
+  .matched-hero-badge img {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border-radius: 4px;
+    object-fit: cover;
+    display: block;
+  }
+  .matched-hero-badge span {
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+  }
+  /* MATCHED HEROES END */
+/* PREMIUM HEROES START */
+  .hero-card {
+    position: relative;
+    background: radial-gradient(circle at 50% 30%, #4b2882 0%, #1a0e2e 100%) !important;
+    border: 2px solid #6b42a8 !important;
+    border-radius: 10px !important;
+    overflow: hidden;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.7), inset 0 0 12px rgba(168, 85, 247, 0.4) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease !important;
+  }
+  .hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.45s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .hero-card:hover::before {
+    left: 160%;
+  }
+  .hero-card:hover {
+    border-color: #e879f9 !important;
+    transform: translateY(-4px) scale(1.03) !important;
+    box-shadow: 0 8px 18px rgba(192, 132, 252, 0.55), inset 0 0 15px rgba(232, 121, 249, 0.5) !important;
+  }
+  .hero-card.active {
+    border-color: #ffcc00 !important;
+    box-shadow: 0 0 18px rgba(255, 204, 0, 0.95), 0 0 28px rgba(255, 136, 0, 0.65) !important;
+    transform: translateY(-4px) scale(1.04) !important;
+  }
+  .hero-card img {
+    filter: contrast(1.08) saturate(1.15);
+    transition: transform 0.25s ease, filter 0.25s ease;
+  }
+  .hero-card:hover img {
+    transform: scale(1.06);
+    filter: contrast(1.12) saturate(1.22);
+  }
+  /* PREMIUM HEROES END */
+
+/* SEAMLESS BANNER START */
+  @keyframes bannerPulse {
+    0%, 100% { border-color: #9333ea; box-shadow: 0 0 22px rgba(168, 85, 247, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.3); }
+    50% { border-color: #f0abfc; box-shadow: 0 0 38px rgba(217, 70, 239, 0.85), 0 0 15px rgba(255, 204, 0, 0.4); }
+  }
+  @keyframes bannerSweep {
+    0% { left: -100%; }
+    35%, 100% { left: 150%; }
+  }
+  .main-banner-wrap {
+    width: 100%;
+    max-width: 1080px;
+    margin-bottom: 0;
+    border-radius: 14px 14px 0 0;
+    overflow: hidden;
+    border: 2px solid #a855f7;
+    border-bottom: none;
+    position: relative;
+    z-index: 2;
+    background: #0d0717;
+    animation: bannerPulse 4s infinite ease-in-out;
+  }
+  .main-banner-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 45%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+    transform: skewX(-25deg);
+    animation: bannerSweep 7s infinite ease-in-out;
+    pointer-events: none;
+  }
+  .main-banner-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: contrast(1.04) saturate(1.08);
+  }
+  .discord-bar {
+    border-radius: 0 0 14px 14px !important;
+    border-top: 1px solid rgba(240, 171, 252, 0.45) !important;
+    border-left: 2px solid #a855f7 !important;
+    border-right: 2px solid #a855f7 !important;
+    border-bottom: 2px solid #a855f7 !important;
+    margin-bottom: 16px !important;
+    background: linear-gradient(90deg, #160c29 0%, #3b1c6e 30%, #5865F2 50%, #3b1c6e 70%, #160c29 100%) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.85), 0 4px 20px rgba(168, 85, 247, 0.45) !important;
+  }
+  /* SEAMLESS BANNER END */
+
+
+/* NEBULA & TOP BTN START */
+  @keyframes nebulaBreathe {
+    0%, 100% { opacity: 0.45; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.12); }
+  }
+  
+  
+  
+  
+  
+  
+  @media (max-width: 1150px) {
+    
+  }
+  /* NEBULA & TOP BTN END */
+/* SMOOTH SCROLL & PERF START */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  
+  .acc {
+    content-visibility: auto;
+    contain-intrinsic-size: 680px;
+  }
+  /* SMOOTH SCROLL & PERF END */
+
+  
+  
+
+/* RED DRIVE BTN START */
+  @keyframes redDriveGlow {
+    0%, 100% { box-shadow: inset 0 0 12px rgba(255, 100, 100, 0.35), 0 2px 8px rgba(220, 38, 38, 0.4); }
+    50% { box-shadow: inset 0 0 20px rgba(255, 204, 0, 0.45), 0 2px 14px rgba(239, 68, 68, 0.85); }
+  }
+  .drive-btn {
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    text-align: center !important;
+    background: linear-gradient(90deg, #5c0a16 0%, #b91c1c 35%, #dc2626 50%, #b91c1c 65%, #5c0a16 100%) !important;
+    color: #fff3b0 !important;
+    font-weight: 900 !important;
+    font-size: 13.5px !important;
+    letter-spacing: 0.9px !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    padding: 11px 14px !important;
+    border-bottom: 2px solid #ff6b6b !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85) !important;
+    animation: redDriveGlow 2.2s infinite ease-in-out !important;
+    transition: all 0.2s ease !important;
+  }
+  .drive-btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: -100%;
+    width: 50%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.32), transparent);
+    transform: skewX(-25deg);
+    transition: left 0.5s ease;
+  }
+  .drive-btn:hover::after {
+    left: 150%;
+  }
+  .drive-btn:hover {
+    background: linear-gradient(90deg, #7f1d1d 0%, #dc2626 30%, #ef4444 50%, #dc2626 70%, #7f1d1d 100%) !important;
+    color: #ffffff !important;
+    border-bottom-color: #ffcc00 !important;
+    text-shadow: 0 0 10px rgba(255, 230, 128, 0.95) !important;
+  }
+  /* RED DRIVE BTN END */
+/* PAYMENT BAR START */
+  .payment-bar {
+    width: 100%;
+    max-width: 1080px;
+    background: linear-gradient(90deg, #120921 0%, #241240 50%, #120921 100%);
+    border: 1.5px solid #7e22ce;
+    border-radius: 10px;
+    padding: 9px 16px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.75), 0 0 14px rgba(147, 51, 234, 0.3);
+    position: relative;
+    z-index: 2;
+  }
+  .payment-label {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #e9d5ff;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .pay-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 13px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  }
+  .pay-paypal {
+    background: linear-gradient(135deg, #003087 0%, #0070e0 100%);
+    border: 1.5px solid #7dd3fc;
+    color: #ffffff;
+  }
+  .pay-steam {
+    background: linear-gradient(135deg, #171a21 0%, #2a475e 100%);
+    border: 1.5px solid #66c0f4;
+    color: #e0f2fe;
+  }
+  /* PAYMENT BAR END */
+
+
+  .back-to-top {
+    position: fixed !important;
+    right: 145px !important;
+    bottom: 24px !important;
+    z-index: 99999 !important;
+    background: linear-gradient(135deg, #4c1d95 0%, #7e22ce 100%) !important;
+    color: #ffe680 !important;
+    border: 2px solid #ffcc00 !important;
+    border-radius: 50px !important;
+    padding: 12px 18px !important;
+    font-size: 13px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.9), 0 0 16px rgba(255, 204, 0, 0.75) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    transition: transform 0.2s ease, background 0.2s ease !important;
+  }
+  .back-to-top:hover {
+    background: #ffcc00 !important;
+    color: #140a21 !important;
+    transform: translateY(-3px) scale(1.05) !important;
+  }
+
+/* FLAG COUNTER START */
+  @keyframes trustedGlow {
+    0%, 100% { color: #ffcc00; text-shadow: 0 0 6px rgba(255, 204, 0, 0.7); transform: scale(1); }
+    50% { color: #ffffff; text-shadow: 0 0 14px #ffcc00, 0 0 22px #ff8800; transform: scale(1.04); }
+  }
+  .trusted-box {
+    position: fixed;
+    top: 15px;
+    right: calc(50% + 540px + ((50vw - 540px) / 2));
+    transform: translateX(50%);
+    z-index: 95;
+    background: radial-gradient(circle at 50% 20%, #3b1c5e 0%, #120821 100%);
+    border: 2px solid #ffcc00;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 204, 0, 0.55);
+    text-align: center;
+    max-width: 195px;
+  }
+  .trusted-text {
+    font-size: 13.5px;
+    font-weight: 900;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    line-height: 1.25;
+    animation: trustedGlow 1.8s infinite ease-in-out;
+  }
+  .trusted-box img {
+    width: 175px;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    border: 1.5px solid rgba(255, 204, 0, 0.65);
+  }
+  
+  
+  
+  @media (max-width: 1520px) {
+    .trusted-box {
+      position: static;
+      transform: none;
+      margin: 0 auto 14px auto;
+      width: fit-content;
+    }
+  }
+  @media (max-width: 1520px) {
+    
+  }
+  /* FLAG COUNTER END */
+
+  .live-top-box {
+    position: fixed;
+    top: 294px;
+    left: calc(50% + 540px + ((50vw - 540px) / 2));
+    transform: translateX(-50%);
+    z-index: 96;
+    width: 132px; padding: 7px 12px; gap: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    background: #0d0717;
+    border: 2px solid #a855f7;
+    border-top: 1.5px solid #ffcc00;
+    border-radius: 0 0 10px 10px;
+    padding: 6px 8px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.85), 0 0 14px rgba(255, 204, 0, 0.4);
+  }
+  .flag-clean-wrap {
+    position: fixed;
+    top: 15px;
+    left: calc(50% + 540px + ((50vw - 540px) / 2));
+    transform: translateX(-50%);
+    z-index: 95;
+    background: #0d0717;
+    border: 2px solid #a855f7;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+    padding: 6px 6px 4px 6px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.85), 0 0 14px rgba(168, 85, 247, 0.45);
+  }
+  @media (max-width: 1520px) {
+    .live-top-box, .flag-clean-wrap {
+      position: static;
+      transform: none;
+      margin: 16px auto;
+      width: fit-content;
+    }
+  }
+
+
+  .bleach-top-nav {
+    width: 100%;
+    max-width: 1080px;
+    margin: 0 auto 14px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+  .btn-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(90deg, #1b0c30 0%, #581c87 50%, #1b0c30 100%);
+    color: #ffe680;
+    border: 2px solid #ffcc00;
+    border-radius: 10px;
+    padding: 9px 24px;
+    font-size: 13.5px;
+    font-weight: 900;
+    letter-spacing: 0.9px;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8), 0 0 14px rgba(168, 85, 247, 0.5);
+    transition: all 0.2s ease;
+  }
+  .btn-back-home:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(90deg, #581c87 0%, #9333ea 50%, #581c87 100%);
+    color: #ffffff;
+    box-shadow: 0 0 22px rgba(255, 204, 0, 0.85);
+  }
+
+
+  /* 100% IDENTICNO CENTRIRANJE I PORAVNANJE NA OBJE STRANICE */
+  html {
+    overflow-y: scroll;
+  }
+  body {
+    padding-top: 15px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    overflow-x: hidden !important;
+  }
+  .container {
+    width: 100% !important;
+    max-width: 1080px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .bleach-top-nav {
+    width: 100% !important;
+    max-width: 1080px !important;
+    margin: 0 auto 14px auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .btn-nav-active, .btn-back-home {
+    padding: 9px 24px !important;
+    font-size: 13.5px !important;
+    line-height: 1.2 !important;
+    box-sizing: border-box !important;
+  }
+  .banner-box {
+    width: 100% !important;
+    max-width: 1080px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+  .trusted-box {
+    position: fixed !important;
+    top: 15px !important;
+    right: calc(50% + 540px + ((100vw - 1080px) / 4)) !important;
+    transform: translateX(50%) !important;
+    width: 195px !important;
+    max-width: 195px !important;
+  }
+  .flag-clean-wrap {
+    position: fixed !important;
+    top: 15px !important;
+    left: calc(50% + 540px + ((100vw - 1080px) / 4)) !important;
+    transform: translateX(-50%) !important;
+  }
+  .live-top-box {
+    position: fixed !important;
+    top: 294px !important;
+    left: calc(50% + 540px + ((100vw - 1080px) / 4)) !important;
+    transform: translateX(-50%) !important;
+    width: 132px !important;
+  }
+  @media (max-width: 1520px) {
+    .trusted-box, .flag-clean-wrap, .live-top-box {
+      position: static !important;
+      transform: none !important;
+      margin: 12px auto !important;
+    }
+  }
+
+
+  /* POPRAVLJEN FLAG COUNTER (E57c) */
+  .flag-clean-wrap {
+    position: fixed !important;
+    top: 15px !important;
+    left: calc(50% + 540px + ((100vw - 1080px) / 4)) !important;
+    transform: translateX(-50%) !important;
+    z-index: 95 !important;
+    background: #0d0717 !important;
+    border: 2px solid #a855f7 !important;
+    border-bottom: none !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 6px 6px 4px 6px !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.85), 0 0 14px rgba(168, 85, 247, 0.45) !important;
+    margin: 0 !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .flag-clean-wrap img {
+    display: block !important;
+    width: auto !important;
+    height: auto !important;
+    max-width: none !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  @media (max-width: 1280px) {
+    .flag-clean-wrap {
+      position: static !important;
+      transform: none !important;
+      margin: 12px auto !important;
+      border-bottom: 2px solid #a855f7 !important;
+      border-radius: 10px !important;
+      width: fit-content !important;
+    }
+  }
+
+
+  .trusted-box a.btn-epicnpc-topic,
+  .btn-epicnpc-topic {
+    display: block !important;
+    width: 100% !important;
+    margin: 6px 0 2px 0 !important;
+    padding: 7px 10px !important;
+    background: linear-gradient(90deg, #581c87 0%, #9333ea 50%, #581c87 100%) !important;
+    background-clip: padding-box !important;
+    color: #ffe680 !important;
+    border: 1.5px solid #ffcc00 !important;
+    border-radius: 8px !important;
+    outline: none !important;
+    font-size: 11px !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75) !important;
+    transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease !important;
+    line-height: 1.25 !important;
+    box-sizing: border-box !important;
+  }
+  .trusted-box a.btn-epicnpc-topic:hover,
+  .btn-epicnpc-topic:hover {
+    background: linear-gradient(90deg, #7e22ce 0%, #a855f7 50%, #7e22ce 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 14px rgba(255, 204, 0, 0.85) !important;
+  }
+
+
+  
+
+  
+
+  /* MIRAN OMOTAC: KUTIJA DISE, GUMB STOJI 100% MIRNO */
+  .epicnpc-wrapper {
+    position: fixed !important;
+    top: 15px !important;
+    right: calc(50% + 540px + ((100vw - 1080px) / 4)) !important;
+    transform: translateX(50%) !important;
+    z-index: 95 !important;
+    width: 195px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+  .epicnpc-wrapper .trusted-box {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .epicnpc-wrapper .btn-epicnpc-topic {
+    position: static !important;
+    animation: none !important;
+    transform: none !important;
+    transition: none !important;
+    margin: 0 !important;
+  }
+  @media (max-width: 1280px) {
+    .epicnpc-wrapper {
+      position: static !important;
+      transform: none !important;
+      margin: 12px auto !important;
+    }
+  }
+
+
+
+  /* ZLATNI OKVIR OKO EPICNPC SLIKE */
+  img[src*="epicnpc" i] {
+    border: 2.5px solid #ffcc00 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 14px rgba(255, 204, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.85) !important;
+    box-sizing: border-box !important;
+    display: block !important;
+  }
+
+
+
+  
+
+  /* STYLISH HOW TO BUY KUTIJA ISPOD EPICNPC BEDZA */
+  .howtobuy-box {
+    width: 100%;
+    max-width: 195px;
+    background: linear-gradient(180deg, #160929 0%, #0d0717 100%);
+    border: 2px solid #ffcc00;
+    border-radius: 12px;
+    padding: 10px 10px 8px 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 15px rgba(168, 85, 247, 0.45);
+    box-sizing: border-box;
+    margin-top: 2px;
+    text-align: left;
+  }
+  .howtobuy-header {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 900;
+    color: #ffe680;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-bottom: 1.5px solid rgba(255, 204, 0, 0.4);
+    text-shadow: 0 0 8px rgba(255, 204, 0, 0.6);
+  }
+  .htb-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+    margin-bottom: 7px;
+    background: rgba(88, 28, 135, 0.25);
+    border: 1px solid rgba(168, 85, 247, 0.35);
+    border-radius: 7px;
+    padding: 5px 6px;
+  }
+  .htb-step:last-child {
+    margin-bottom: 0;
+  }
+  .htb-num {
+    min-width: 18px;
+    height: 18px;
+    background: linear-gradient(135deg, #ffcc00 0%, #f59e0b 100%);
+    color: #0d0717;
+    font-size: 11px;
+    font-weight: 900;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    box-shadow: 0 0 6px rgba(255, 204, 0, 0.7);
+  }
+  .htb-txt {
+    font-size: 10.5px;
+    line-height: 1.28;
+    color: #f3e8ff;
+  }
+  .htb-txt b {
+    color: #ffe680;
+    display: block;
+    font-size: 11px;
+    margin-bottom: 1px;
+  }
+
+
+
+  
+
+  /* JEDNA DO DRUGE LIJEVO: EPICNPC + HOW TO BUY BEZ PREKLAPANJA */
+  .left-side-row {
+    position: fixed !important;
+    top: 15px !important;
+    left: 15px !important;
+    z-index: 95 !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+  .left-side-row .epicnpc-wrapper,
+  .left-side-row .trusted-box {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 175px !important;
+    flex-shrink: 0 !important;
+  }
+  .left-side-row .howtobuy-box {
+    position: static !important;
+    transform: none !important;
+    margin: 0 !important;
+    width: 175px !important;
+    max-width: 175px !important;
+    flex-shrink: 0 !important;
+    background: linear-gradient(180deg, #160929 0%, #0d0717 100%) !important;
+    border: 2px solid #ffcc00 !important;
+    border-radius: 12px !important;
+    padding: 8px 8px 6px 8px !important;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.9), 0 0 15px rgba(168, 85, 247, 0.45) !important;
+  }
+  .left-side-row .htb-step {
+    padding: 4px 5px !important;
+    margin-bottom: 5px !important;
+  }
+  .left-side-row .htb-txt {
+    font-size: 10px !important;
+    line-height: 1.22 !important;
+  }
+  @media (max-width: 1620px) {
+    .left-side-row {
+      position: static !important;
+      flex-wrap: wrap !important;
+      justify-content: center !important;
+      width: 100% !important;
+      max-width: 1080px !important;
+      margin: 12px auto !important;
+    }
+    .left-side-row .howtobuy-box {
+      width: 100% !important;
+      max-width: 680px !important;
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 8px !important;
+    }
+    .left-side-row .howtobuy-header {
+      grid-column: 1 / -1 !important;
+      margin-bottom: 2px !important;
+    }
+    .left-side-row .htb-step {
+      margin-bottom: 0 !important;
+    }
+  }
+  @media (max-width: 760px) {
+    .left-side-row .howtobuy-box {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
+
+
+  /* ISTAKNUTA CIJENA PORED ACCOUNT NASLOVA */
+  .acc-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    padding: 8px 12px !important;
+    text-align: center !important;
+  }
+  .acc-price-badge {
+    background: linear-gradient(135deg, #ffd700 0%, #ffae00 100%);
+    color: #140824;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.4px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.45);
+    border: 1px solid #fff3a1;
+  }
+
+
+
+  /* KOREKCIJA VISINE SLIKE DESKTOP VS MOBITEL */
+  .img-crop-box { max-height: none !important; height: auto !important; overflow: hidden !important; border-radius: 8px; }
+  .acc.open .img-crop-box,
+  .acc.expanded .img-crop-box,
+  .img-crop-box.open,
+  .img-crop-box.expanded {
+    max-height: none !important;
+  }
+  @media (max-width: 768px) {
+    .img-crop-box {
+      max-height: 250px !important;
+    }
+    .acc.open .img-crop-box,
+    .acc.expanded .img-crop-box,
+    .img-crop-box.open,
+    .img-crop-box.expanded {
+      max-height: none !important;
+    }
+  }
+
+
+
+  
+
+  /* ZLATNA SLOVA HEROJA */
+  .hero-name-label {
+    color: #ffd700 !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    margin: 4px 2px 2px 2px !important;
+    text-align: center !important;
+    word-break: break-word !important;
+  }
+  .hero-card {
+    height: auto !important;
+    padding-bottom: 6px !important;
+  }
+
+  .discord-bar { position: relative !important; z-index: 9999 !important; pointer-events: auto !important; }
+  .copy-discord-btn { position: relative !important; z-index: 10000 !important; pointer-events: auto !important; cursor: pointer !important; }
+  .img-crop-box { max-height: none !important; height: 430px !important; overflow: hidden !important; border-radius: 8px; }
+  .img-crop-box img { width: 100%; height: auto; display: block; transition: transform 0.25s ease; }
+  .img-crop-box:hover img { transform: scale(1.03); }
+  .img-crop-box .img-fade, .toggle-wrap { display: none !important; }
+  .extra-btns-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 8px; }
+  .extra-img-btn { background: linear-gradient(180deg, #3b1c5e 0%, #24103d 100%); color: #ffe680; border: 1px solid #8b5cf6; border-radius: 6px; padding: 6px 8px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.15s; text-align: center; }
+  .extra-img-btn:hover { background: #6d28d9; color: #fff; transform: translateY(-1px); }
+  .extra-img-btn.missing { opacity: 0.38; cursor: not-allowed; border-color: #4b5563; color: #9ca3af; }
+  .extra-img-btn.missing:hover { background: linear-gradient(180deg, #3b1c5e 0%, #24103d 100%); transform: none; }
+  #imgModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88); z-index: 99999; align-items: center; justify-content: center; flex-direction: column; padding: 16px; }
+  #imgModal.open { display: flex; }
+  #imgModalTop { display: flex; align-items: center; justify-content: center; gap: 14px; width: 100%; max-width: 760px; margin: 0 auto 10px auto; color: #ffe680; font-weight: 800; font-size: 15px; text-align: center; }
+  #imgModalClose { background: #ef4444; color: #fff; border: none; border-radius: 6px; padding: 6px 14px; font-weight: 800; cursor: pointer; }
+  #imgModalImg { max-width: 95vw; max-height: 82vh; border-radius: 10px; border: 2px solid #a855f7; box-shadow: 0 0 30px rgba(168,85,247,0.5); }
+  #imgModalWrap { position: relative; display: flex; align-items: center; justify-content: center; max-width: 95vw; max-height: 82vh; }
+  .modal-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(59, 28, 94, 0.92); color: #ffe680; border: 2px solid #a855f7; border-radius: 50%; width: 46px; height: 46px; font-size: 20px; font-weight: 900; cursor: pointer; z-index: 100001; display: flex; align-items: center; justify-content: center; transition: 0.15s; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+  .modal-nav-btn:hover { background: #7c3aed; color: #fff; transform: translateY(-50%) scale(1.08); }
+  #imgModalPrev { left: 10px; }
+  #imgModalNext { right: 10px; }
+  @keyframes slideFromRight {
+    from { opacity: 0; transform: translateX(48px) scale(0.96); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  @keyframes slideFromLeft {
+    from { opacity: 0; transform: translateX(-48px) scale(0.96); }
+    to { opacity: 1; transform: translateX(0) scale(1); }
+  }
+  @keyframes navPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(168, 85, 247, 0.55); }
+    50% { box-shadow: 0 0 22px rgba(255, 230, 128, 0.9); }
+  }
+  .modal-nav-btn { animation: navPulse 2.2s infinite ease-in-out; }
+  .anim-next { animation: slideFromRight 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .anim-prev { animation: slideFromLeft 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .extra-img-btn { display: inline-flex !important; align-items: center !important; justify-content: center !important; gap: 6px !important; }
+  .game-ico { width: 14px; height: 14px; flex-shrink: 0; fill: currentColor; }
+  .extra-img-btn span {
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.9px !important;
+    background: linear-gradient(180deg, #ffffff 15%, #ffe680 95%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.85));
+  }
+  .extra-img-btn:hover span {
+    background: linear-gradient(180deg, #ffffff 30%, #f5d0fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 6px rgba(232, 121, 249, 0.85));
+  }
+  .extra-img-btn.missing span {
+    background: none !important;
+    -webkit-text-fill-color: #9ca3af !important;
+    filter: none !important;
+  }
+  #imgModalTitle {
+    font-family: 'Rajdhani', 'Segoe UI', sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.1px !important;
+    color: #ffe680 !important;
+    text-shadow: 0 0 10px rgba(168, 85, 247, 0.75);
+  }
+  #imgModalTop { flex-wrap: wrap !important; gap: 10px !important; }
+  #imgModalDrive { white-space: nowrap !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: linear-gradient(135deg, #6d28d9 0%, #9333ea 100%);
+    color: #ffffff;
+    border: 1px solid #d8b4fe;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 0 12px rgba(168, 85, 247, 0.55);
+    transition: 0.15s;
+  }
+  #imgModalDrive:hover { background: #7e22ce; transform: scale(1.04); color: #ffe680; }
+  .acc-card .img-crop-box, .img-crop-box {
+    height: auto !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    overflow: hidden !important;
+    border-radius: 8px !important;
+  }
+  .acc-card .img-crop-box img, .img-crop-box img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+</style>
+<link href="https://googleapis.com" rel="stylesheet"/>
+<style>.extra-btns-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:3px!important;box-sizing:border-box!important;width:100%!important;padding:2px 3px 8px 3px!important;margin:0!important}.extra-img-btn{width:100%!important;box-sizing:border-box!important;min-width:0!important;padding-left:2px!important;padding-right:2px!important;gap:3px!important}.extra-img-btn svg,.extra-img-btn span:first-child{margin-right:0!important}</style><style>.flag-clean-wrap{border:2px solid #ffcc00!important;border-bottom:2px solid #ffcc00!important;border-radius:10px!important;padding-bottom:6px!important}.live-top-box{border:2px solid #ffcc00!important;border-top:2px solid #ffcc00!important;border-radius:10px!important;width:auto!important;min-width:138px!important;padding:7px 12px!important}.live-top-box div[title]{width:80px!important;min-width:80px!important;box-sizing:content-box!important;overflow:visible!important}</style>
+
+<style id="gfx-c">@keyframes gTw{0%,100%{opacity:.28;transform:scale(.92)}50%{opacity:.95;transform:scale(1.18)}}@keyframes gMt{0%{transform:translate(0,0) rotate(-35deg);opacity:0}4%{opacity:1}18%{transform:translate(-1150px,760px) rotate(-35deg);opacity:0}100%{transform:translate(-1150px,760px) rotate(-35deg);opacity:0}}@keyframes gSp{0%{transform:translateY(0) scale(.85);opacity:0}15%{opacity:1}85%{opacity:.85}100%{transform:translateY(-102vh) scale(1.25);opacity:0}}#gacha-fx,#gacha-fx *{pointer-events:none!important}#gacha-fx{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;min-width:100vw!important;height:100%!important;min-height:100vh!important;z-index:1!important;overflow:hidden!important}html{background:#06040a!important;background-image:radial-gradient(circle at 50% 22%,#1b0e33 0%,#0b0614 55%,#050308 100%)!important;background-attachment:fixed!important}body,.layout,.grid,.columns,.side-col,.right-col,.left-col,.sidebar{background:transparent!important;background-color:transparent!important}.container,.main-wrap,.bleach-wrap,.page-wrap,.content-wrap{background:transparent!important}img,.banner,.main-banner,.hero-card,.catalog-card,.panel,.card,.box,.discord-bar,.bleach-top-nav,.btn-back-home{position:relative!important;z-index:5!important}.g-st{position:absolute;inset:0;background-image:radial-gradient(2px 2px at 10% 15%,#fff,transparent),radial-gradient(2px 2px at 24% 68%,#ffe680,transparent),radial-gradient(1.5px 1.5px at 38% 28%,#fff,transparent),radial-gradient(2px 2px at 52% 82%,#f0abfc,transparent),radial-gradient(2px 2px at 67% 20%,#ffe680,transparent),radial-gradient(1.5px 1.5px at 79% 58%,#fff,transparent),radial-gradient(2px 2px at 91% 34%,#f0abfc,transparent),radial-gradient(1.5px 1.5px at 16% 86%,#fff,transparent);animation:gTw 4.5s infinite ease-in-out}.g-mt{position:absolute;width:140px;height:2px;background:linear-gradient(90deg,#fff 0%,#ffcc00 35%,#a855f7 75%,transparent 100%);border-radius:50%;filter:drop-shadow(0 0 6px #ffcc00);opacity:0;animation:gMt 8.5s infinite linear}.g-sp{position:absolute;bottom:-12px;border-radius:50%;opacity:0;animation:gSp 8s infinite linear}</style>
+<style id="gfx-unblock">#gacha-fx,#gacha-fx div{display:block!important}.bleach-wrap,.bleach-panel,.main-wrapper,.page-wrapper{background:transparent!important}.account-card,.acc-card,.account-box,.card,.banner-wrap,.discord-bar,.bleach-top-nav,.btn-back-home,.accounts{position:relative!important;z-index:5!important}</style>
+<style id="home-purple-theme">@keyframes purplePulse{0%,100%{opacity:.05}50%{opacity:.66}}html{min-height:100%!important;background:#06040a!important;background-image:none!important;position:relative!important}html::before{content:""!important;position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;z-index:0!important;pointer-events:none!important;background:linear-gradient(180deg,#24104a 0%,#34176b 50%,#200e42 100%)!important;animation:purplePulse 7s ease-in-out infinite!important}body{background:transparent!important;background-image:none!important}</style>
+<style id="sa-btn-full">.extra-btns-grid{display:block!important;width:100%!important;margin-top:8px!important;box-sizing:border-box!important}.extra-img-btn{display:flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important;padding:10px 14px!important;font-size:13px!important;box-sizing:border-box!important}</style>
+<style id="sa-modal-nav-fix">#imgModalWrap{display:flex!important;align-items:center!important;justify-content:center!important;gap:4.5vw!important}#imgModalPrev,#imgModalNext{position:relative!important;top:auto!important;bottom:auto!important;left:auto!important;right:auto!important;align-self:center!important;transform:none!important;margin:0!important}@media(max-width:768px){#imgModalWrap{gap:16px!important}}</style>
+<style id="sa-acc-stats-css">.acc-stats-bar{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;align-items:center!important;gap:6px!important;padding:7px 8px!important;background:linear-gradient(90deg,#160b29 0%,#2a144d 50%,#160b29 100%)!important;border-bottom:1.5px solid #ffcc00!important}.acc-stat-pill{display:inline-flex!important;align-items:center!important;gap:4px!important;padding:3px 9px!important;border-radius:6px!important;background:rgba(0,0,0,.55)!important;border:1px solid rgba(255,204,0,.65)!important;color:#ffe680!important;font-size:11.5px!important;font-weight:800!important;letter-spacing:.3px!important;box-shadow:0 0 8px rgba(139,92,246,.35)!important}.acc-stat-pill.gems{border-color:#38bdf8!important;color:#bae6fd!important}.acc-stat-pill.power{border-color:#c084fc!important;color:#f3e8ff!important}</style>
+</head>
+<body>
+<div class="bleach-top-nav"><a class="btn-back-home" href="https://genesisgachastore.github.io/home/">🏠 Home • Genesis Gacha Store</a></div>
+<!-- NEBULA & TOP BTN HTML START -->
+<button class="back-to-top" id="topBtn" onclick="document.querySelector('.bleach-panel').scrollIntoView({behavior:'smooth'})" type="button">▲ Top</button>
+<!-- NEBULA & TOP BTN HTML END -->
+
+<!-- FULL BANNER HTML START -->
+<div class="main-banner-wrap">
+<img alt="Bleach Soul Resonance Promo Banner" src="slike/banner.jpg"/>
+</div>
+<!-- FULL BANNER HTML END -->
+<div class="discord-bar"><span class="discord-text">💬 For any questions, prices or more images, add me on Discord:</span><span class="discord-tag" id="dcTag">GenesisGacha#0271</span><button class="copy-discord-btn" onclick="(function(b){var t=document.getElementById('dcTag').textContent.trim();var ok=false;var ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,9999);try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);if(!ok&amp;&amp;navigator.clipboard){navigator.clipboard.writeText(t).catch(function(){});}var o=b.innerHTML;b.innerHTML='✓ Copied!';setTimeout(function(){b.innerHTML=o;},2000);})(this)" type="button">📋 Copy</button></div>
+<!-- PAYMENT BAR HTML START -->
+<div class="payment-bar">
+<span class="payment-label">💳 Accepted Payment Methods:</span>
+<span class="pay-badge pay-paypal">🅿️ PayPal</span>
+<span class="pay-badge pay-steam">🎮 Steam Gift Cards (EU)</span>
+</div>
+<!-- PAYMENT BAR HTML END -->
+<div class="bleach-panel"><div class="bleach-title">STONE AGE: IDLE ADVENTURE</div><div class="bleach-subtitle">World 8 | Trainer LvL 220+ | Stages 250+ | Blue Gems 2.2M</div></div>
+<div class="status" id="status"></div>
+<div class="accounts" id="accounts"></div>
+<script>
+    const HEROJI = [];
+    const DRIVE_LINKOVI = {
+  "Account#1": "https://drive.google.com/drive/u/0/folders/1Gi_46QFegNGeQOuIkxVeSifVY-oZ8GvV",
+  "Account#2": "https://drive.google.com/drive/u/0/folders/1GmE7FMuLVg1HHEBcQHJy4Qh71wOpcOq9",
+  "Account#4": "https://drive.google.com/drive/u/0/folders/1YG48vpU3Xg-58lY5u-VNgtioVgie35P7",
+  "Account#5": "https://drive.google.com/drive/u/0/folders/148bDThfeqgY-Xt63Bat0zoOtM5vzg3Yl",
+  "Account#6": "https://drive.google.com/drive/u/0/folders/1pdxRNgESfimdMG0-M1qlY3kY3r6470Gk",
+  "Account#7": "https://drive.google.com/drive/u/0/folders/1GLw6DWEcde2sybWQWTYXhPF0_UskP2ZC",
+  "Account#8": "https://drive.google.com/drive/u/0/folders/1PtCoVWq73WvyQ_CeqyMORKVx3y1CebjF",
+  "Account#9": "https://drive.google.com/drive/u/0/folders/1VoehpoKQU94bTOvTnIP9a2yXOKwqJyVN",
+  "Account#10": "https://drive.google.com/drive/u/0/folders/12o8WUe0Ydv0lQUvzsEQAmogThn9_Vlzs",
+  "Account#11": "https://drive.google.com/drive/u/0/folders/1McXeEXmoHk95vr2QnDXqgWgYWfdIyRLY",
+  "Account#12": "https://drive.google.com/drive/u/0/folders/1lVgDEMXSbzCButTVQ_6K7EJm_feWc9tV",
+  "Account#13": "https://drive.google.com/drive/u/0/folders/1h0vRukx1MReGhjMdrd95X3FWaGtog2gh",
+  "Account#14": "https://drive.google.com/drive/u/0/folders/1bOHRRcoKvTodYHD8Ry2Hx35XudKAoL2y",
+  "Account#16": "https://drive.google.com/drive/u/0/folders/19ooP_r-MhQjIOuEIAldxPodp3GMiuw9k",
+  "Account#17": "https://drive.google.com/drive/u/0/folders/1R_wgNg-FHoxiQTcu8qS9GqQrm_gNw6cM",
+  "Account#18": "https://drive.google.com/drive/u/0/folders/19mvqXWBVRhXrEDi5pRUNwl80mbKs-Gy0",
+  "Account#20": "https://drive.google.com/drive/u/0/folders/1LTSDd-vm0L0LdN8-sTc0xnmf9lkTrnXd",
+  "Account#21": "https://drive.google.com/drive/u/0/folders/1dxb2msG2L_naLiApB9yDP4QEqRDKiUjO",
+  "Account#22": "https://drive.google.com/drive/u/0/folders/1Pb-VKrHCCviKvgHob4O7nGmiabuJGhN1",
+  "Account#23": "https://drive.google.com/drive/u/0/folders/10QDLCm7LkZVXiTueJCOf1n3z2jUK8k2R",
+  "Account#24": "https://drive.google.com/drive/u/0/folders/1SGSA4EhkRUb1-uGge6MV4atnYvrk7trJ"
+};
+    
+    const OBRISANE_SLIKE = new Set();
+    function azurirajStatusBrojac() {
+      const status = document.getElementById('status');
+      if (!status) return;
+      const ukupnoAktivnih = NALOZI.filter(x => !OBRISANE_SLIKE.has(x.naziv)).length;
+      if (odabrani.size > 0) {
+        const br = trenutniRezultati.filter(x => !OBRISANE_SLIKE.has(x.naziv)).length;
+        status.innerHTML = `<span>Showing ${br} of ${ukupnoAktivnih} accounts</span> <button class="reset-btn" onclick="ponistiFilter()">? Clear Filter</button>`;
+      } else {
+        status.innerHTML = `<span>Showing all ${ukupnoAktivnih} accounts</span>`;
+      }
+    }
+
+    function obrisiNestaliNalog(imgEl, nazivNaloga) {
+      if (!OBRISANE_SLIKE.has(nazivNaloga)) {
+        OBRISANE_SLIKE.add(nazivNaloga);
+        azurirajStatusBrojac();
+      }
+      if (imgEl) {
+        const kartica = imgEl.closest('.acc');
+        if (kartica) kartica.remove();
+      }
+    }
+
+    // Tiha provjera svih slika odmah po ucitavanju stranice (radi i za obrisane i za ponovo vracene slike)
+    window.addEventListener('load', () => {
+      NALOZI.forEach(a => {
+        const testImg = new Image();
+        testImg.onerror = () => {
+          OBRISANE_SLIKE.add(a.naziv);
+          document.querySelectorAll('.acc').forEach(card => {
+            const titleEl = card.querySelector('.acc-title span');
+            if (titleEl && titleEl.textContent.trim() === a.naziv) card.remove();
+          });
+          azurirajStatusBrojac();
+        };
+        testImg.src = a.slika + '?v=' + Math.floor(Date.now() / 60000);
+      });
+    });
+    const NALOZI = [{"naziv": "Account#1", "heroji": [], "slika": "slike/acc_1.jpg"}, {"naziv": "Account#2", "heroji": [], "slika": "slike/acc_2.jpg"}, {"naziv": "Account#3", "heroji": [], "slika": "slike/acc_3.jpg"}, {"naziv": "Account#4", "heroji": [], "slika": "slike/acc_4.jpg"}, {"naziv": "Account#5", "heroji": [], "slika": "slike/acc_5.jpg"}, {"naziv": "Account#6", "heroji": [], "slika": "slike/acc_6.jpg"}, {"naziv": "Account#7", "heroji": [], "slika": "slike/acc_7.jpg"}, {"naziv": "Account#8", "heroji": [], "slika": "slike/acc_8.jpg"}, {"naziv": "Account#9", "heroji": [], "slika": "slike/acc_9.jpg"}, {"naziv": "Account#10", "heroji": [], "slika": "slike/acc_10.jpg"}, {"naziv": "Account#11", "heroji": [], "slika": "slike/acc_11.jpg"}, {"naziv": "Account#12", "heroji": [], "slika": "slike/acc_12.jpg"}, {"naziv": "Account#13", "heroji": [], "slika": "slike/acc_13.jpg"}, {"naziv": "Account#14", "heroji": [], "slika": "slike/acc_14.jpg"}, {"naziv": "Account#15", "heroji": [], "slika": "slike/acc_15.jpg"}, {"naziv": "Account#16", "heroji": [], "slika": "slike/acc_16.jpg"}, {"naziv": "Account#17", "heroji": [], "slika": "slike/acc_17.jpg"}, {"naziv": "Account#18", "heroji": [], "slika": "slike/acc_18.jpg"}, {"naziv": "Account#19", "heroji": [], "slika": "slike/acc_19.jpg"}, {"naziv": "Account#20", "heroji": [], "slika": "slike/acc_20.jpg"}, {"naziv": "Account#21", "heroji": [], "slika": "slike/acc_21.jpg"}, {"naziv": "Account#22", "heroji": [], "slika": "slike/acc_22.jpg"}, {"naziv": "Account#23", "heroji": [], "slika": "slike/acc_23.jpg"}, {"naziv": "Account#24", "heroji": [], "slika": "slike/acc_24.jpg"}];
+    let odabrani = new Set();
+    const grid = document.getElementById('heroes');
+    HEROJI.forEach(h => {
+      const card = document.createElement('div'); card.className = 'hero-card'; card.title = h.ime;
+      card.innerHTML = `<img src="${h.slika}"><div class="hero-name-label">${h.ime}</div><div class="cb-area"><div class="cb"></div></div>`;
+      card.onclick = () => { const k = h.ime.toLowerCase(); if (odabrani.has(k)) { odabrani.delete(k); card.classList.remove('active'); } else { odabrani.add(k); card.classList.add('active'); } 
+    window.addEventListener('scroll', () => {
+      const btn = document.getElementById('topBtn');
+      if (btn) {
+        if (window.scrollY > 450) btn.classList.add('show');
+        else btn.classList.remove('show');
+      }
+    });
+
+    filtriraj(); };
+      grid.appendChild(card);
+    });
+    let trenutniRezultati = [];
+    let prikazanoDoSada = 0;
+    const KORAK_PRIKAZA = 24;
+
+    function dodajSljedecuGrupu() {
+      const lista = document.getElementById('accounts');
+      if (prikazanoDoSada >= trenutniRezultati.length) return;
+
+      let matchedHtml = '';
+      if (odabrani.size > 0) {
+        const odabraniObjekti = HEROJI.filter(h => odabrani.has(h.ime.toLowerCase()));
+        const bedzevi = odabraniObjekti.map(h => `
+          <div class="matched-hero-badge">
+            <img src="${h.slika}" alt="${h.ime}">
+            <span>${h.ime}</span>
+          </div>
+        `).join('');
+        matchedHtml = `<div class="matched-box"><span class="matched-label">⭐ Matched:</span>${bedzevi}</div>`;
+      }
+
+      const kraj = Math.min(prikazanoDoSada + KORAK_PRIKAZA, trenutniRezultati.length);
+      const fragment = document.createDocumentFragment();
+
+      for (let i = prikazanoDoSada; i < kraj; i++) {
+        const a = trenutniRezultati[i];
+        const div = document.createElement('div');
+        div.className = 'acc';
+        const url = DRIVE_LINKOVI[a.naziv] || "";
+        const gumbHtml = `<a href="${url || "#"}" target="_blank" rel="noopener" class="drive-btn">📸 Click Here For All Images (Google Drive)</a>`;
+        const baseImg = a.slika.replace(/\.(jpg|jpeg|png|webp)$/i, '');
+        const btns4 = `
+          <div class="extra-btns-grid" style="grid-template-columns:1fr"><button type="button" class="extra-img-btn" onclick="otvoriKategoriju('', 'Trainer & Pet', '', this)"><svg class="game-ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.2"/><path d="M4.5 20.5c0-4.1 3.4-6.8 7.5-6.8s7.5 2.7 7.5 6.8H4.5z"/></svg><span>Trainer &amp; Pet</span></button></div>`;
+        div.innerHTML = `${gumbHtml}<div class="acc-title"><span>${a.naziv}</span><span class="acc-price-badge">15 Euro</span></div>${matchedHtml}<div class="img-crop-box"><img src="${a.slika}" loading="lazy"></div>${btns4}`;
+        fragment.appendChild(div);
+      }
+
+      lista.appendChild(fragment);
+      prikazanoDoSada = kraj;
+    }
+
+    function filtriraj() {
+      const lista = document.getElementById('accounts');
+      const status = document.getElementById('status');
+      lista.innerHTML = '';
+      prikazanoDoSada = 0;
+
+      trenutniRezultati = NALOZI.filter(a => {
+        for (let t of odabrani) { if (!a.heroji.includes(t)) return false; }
+        return true;
+      });
+
+      if (odabrani.size > 0) {
+        status.innerHTML = `<span>Showing ${trenutniRezultati.length} of ${NALOZI.length} accounts</span> <button class="reset-btn" onclick="ponistiFilter()">✕ Clear Filter</button>`;
+      } else {
+        status.innerHTML = `<span>Showing all ${NALOZI.length} accounts</span>`;
+      }
+
+      dodajSljedecuGrupu();
+    }
+
+    window.addEventListener('scroll', () => {
+      if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 900)) {
+        dodajSljedecuGrupu();
+      }
+    }, { passive: true });
+
+    let TRENUTNA_LISTA_SLIKA = [];
+    let TRENUTNI_INDEKS_SLIKE = 0;
+    const KAT_LISTA = [{key:'_trainer_1',label:'Trainer 1'},{key:'_trainer_2',label:'Trainer 2'},{key:'_trainer_3',label:'Trainer 3'},{key:'_trainer_4',label:'Trainer 4'},{key:'_trainer_5',label:'Trainer 5'},{key:'_trainer_6',label:'Trainer 6'},{key:'_trainer_7',label:'Trainer 7'},{key:'_trainer_8',label:'Trainer 8'},{key:'_trainer_9',label:'Trainer 9'},{key:'_trainer_10',label:'Trainer 10'},{key:'_trainer_11',label:'Trainer 11'},{key:'_trainer_12',label:'Trainer 12'},{key:'_pet_1',label:'Pet 1'},{key:'_pet_2',label:'Pet 2'},{key:'_pet_3',label:'Pet 3'},{key:'_pet_4',label:'Pet 4'},{key:'_pet_5',label:'Pet 5'},{key:'_pet_6',label:'Pet 6'},{key:'_pet_7',label:'Pet 7'},{key:'_pet_8',label:'Pet 8'},{key:'_pet_9',label:'Pet 9'},{key:'_pet_10',label:'Pet 10'},{key:'_pet_11',label:'Pet 11'},{key:'_pet_12',label:'Pet 12'}];
+
+    function nadjiPostojecuSliku(baseBezEkstenzije, cb) {
+      const exts = ['.jpg', '.png', '.webp', '.jpeg', '.JPG', '.PNG'];
+      let idx = 0;
+      function probaj() {
+        if (idx >= exts.length) { cb(null); return; }
+        const url = baseBezEkstenzije + exts[idx++];
+        const im = new Image();
+        im.onload = () => cb(url);
+        im.onerror = probaj;
+        im.src = url;
+      }
+      probaj();
+    }
+
+    function otvoriKategoriju(naziv, kat, putanja, btn) {
+      const baseAcc = putanja.replace(/\.(jpg|jpeg|png|webp)$/i, '').replace(/_(trainer|pet)(_\d+)?$/i, '');
+      const pref = kat.toLowerCase() === 'pet' ? '_pet_' : '_trainer_';
+      TRENUTNA_LISTA_SLIKA = [];
+      let zavrseno = 0;
+      for (let idx = 1; idx <= 10; idx++) {
+        ((n) => {
+          nadjiPostojecuSliku(baseAcc + pref + n, function(u) {
+            if (u) TRENUTNA_LISTA_SLIKA[n - 1] = { naziv: naziv, kat: kat + ' ' + n, url: u };
+            zavrseno++;
+            if (zavrseno === 10) {
+              TRENUTNA_LISTA_SLIKA = TRENUTNA_LISTA_SLIKA.filter(Boolean);
+              if (!TRENUTNA_LISTA_SLIKA.length) return;
+              TRENUTNI_INDEKS_SLIKE = 0;
+              prikaziTrenutnuSlikuModala();
+              document.getElementById('imgModal').classList.add('open');
+            }
+          });
+        })(idx);
+      }
+    }
+    function prikaziTrenutnuSlikuModala(smjer) {
+      if (!TRENUTNA_LISTA_SLIKA.length) return;
+      const stavka = TRENUTNA_LISTA_SLIKA[TRENUTNI_INDEKS_SLIKE];
+      const brojac = ` (${TRENUTNI_INDEKS_SLIKE + 1}/${TRENUTNA_LISTA_SLIKA.length})`;
+      document.getElementById('imgModalTitle').textContent = stavka.naziv + ' - ' + stavka.kat + brojac;
+      const driveEl = document.getElementById('imgModalDrive');
+      const driveUrl = (typeof DRIVE_LINKOVI !== 'undefined' && DRIVE_LINKOVI[stavka.naziv]) ? DRIVE_LINKOVI[stavka.naziv] : '';
+      if (driveEl) {
+        if (driveUrl) {
+          driveEl.href = driveUrl;
+          driveEl.style.display = 'inline-flex';
+        } else {
+          driveEl.style.display = 'none';
+        }
+      }
+      const imgEl = document.getElementById('imgModalImg');
+      imgEl.classList.remove('anim-next', 'anim-prev');
+      void imgEl.offsetWidth;
+      imgEl.src = stavka.url + '?v=' + Date.now();
+      if (smjer === 1) imgEl.classList.add('anim-next');
+      else if (smjer === -1) imgEl.classList.add('anim-prev');
+      const viseOdJedne = TRENUTNA_LISTA_SLIKA.length > 1;
+      document.getElementById('imgModalPrev').style.display = viseOdJedne ? 'flex' : 'none';
+      document.getElementById('imgModalNext').style.display = viseOdJedne ? 'flex' : 'none';
+    }
+
+    function promijeniSliku(korak) {
+      if (TRENUTNA_LISTA_SLIKA.length <= 1) return;
+      TRENUTNI_INDEKS_SLIKE = (TRENUTNI_INDEKS_SLIKE + korak + TRENUTNA_LISTA_SLIKA.length) % TRENUTNA_LISTA_SLIKA.length;
+      prikaziTrenutnuSlikuModala(korak);
+    }
+
+    function zatvoriSliku() {
+      document.getElementById('imgModal').classList.remove('open');
+      document.getElementById('imgModalImg').src = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      const m = document.getElementById('imgModal');
+      if (!m || !m.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') promijeniSliku(-1);
+      else if (e.key === 'ArrowRight') promijeniSliku(1);
+      else if (e.key === 'Escape') zatvoriSliku();
+    });
+    function ponistiFilter() { odabrani.clear(); document.querySelectorAll('.hero-card.active').forEach(c => c.classList.remove('active')); filtriraj(); }
+    function kopirajDiscord(btn) {
+      const el = document.getElementById('dcTag');
+      if (!el) return;
+      const t = el.textContent.trim();
+      const ta = document.createElement('textarea');
+      ta.value = t;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, 9999);
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      if (navigator.clipboard) { navigator.clipboard.writeText(t).catch(function(){}); }
+      const orig = btn.innerHTML;
+      btn.innerHTML = '&#10003; Copied!';
+      setTimeout(function() { btn.innerHTML = orig; }, 2000);
+    }
+    filtriraj();
+  </script>
+<!-- FLAG COUNTER HTML START -->
+<!-- FLAG COUNTER HTML END -->
+<!-- LIVE COUNTER START -->
+<div class="left-side-row">
+<div class="epicnpc-wrapper">
+<div class="trusted-box">
+<div class="trusted-text">⭐ 100% Trusted Seller ⭐
+    
+  </div>
+<a class="btn-epicnpc-topic" href="https://www.epicnpc.com/threads/aplus-eu-starter-catalog-selector-on-tutorial-only-13-11-2026-25e.3106689/" rel="noopener" target="_blank">🔥 Click Here for EpicNPC Topic</a>
+</div>
+<img alt="EpicNPC Verified Seller" src="slike/epicnpc.png"/>
+</div>
+<div class="howtobuy-box">
+<div class="howtobuy-header">🛒 How to Buy</div>
+<div class="htb-step">
+<span class="htb-num">1</span>
+<div class="htb-txt"><b>Pick Account</b>Select your favorite Account #.</div>
+</div>
+<div class="htb-step">
+<span class="htb-num">2</span>
+<div class="htb-txt"><b>Add on Discord</b>Message me with the Account #.</div>
+</div>
+<div class="htb-step">
+<span class="htb-num">3</span>
+<div class="htb-txt"><b>Live Account Check</b>I will log back into the account so we can confirm it's the exact one you want.</div>
+</div>
+<div class="htb-step">
+<span class="htb-num">4</span>
+<div class="htb-txt"><b>Easy Payment</b>Pay via PayPal or Steam Gift.</div>
+</div>
+<div class="htb-step">
+<span class="htb-num">5</span>
+<div class="htb-txt"><b>Account Binding</b>Send mail or dummy mail &amp; password.</div>
+</div>
+<div class="htb-step">
+<span class="htb-num">6</span>
+<div class="htb-txt"><b>100% Yours</b>Account is 100% yours — change the password and do whatever you want!</div>
+</div>
+</div>
+</div>
+<div class="flag-clean-wrap">
+<a href="https://info.flagcounter.com/E57c" rel="noopener" target="_blank"><img alt="Flag Counter" border="0" src="https://s01.flagcounter.com/count2/E57c/bg_000000/txt_FFFFFF/border_CCCCCC/columns_1/maxflags_10/viewers_0/labels_0/pageviews_1/flags_0/percent_0/"/></a>
+</div>
+<div class="live-top-box" title="Real-time visitors online">
+<span style="display:inline-block; width:8px; height:8px; background:#22c55e; border-radius:50%; box-shadow:0 0 8px #22c55e;"></span>
+<span style="font-size:12px; font-weight:bold; color:#ffe680;">LIVE:</span>
+<script id="_waugen">var _wau = _wau || []; _wau.push(["small", "bleachcat26", "gen"]);</script>
+<script async="" src="//waust.at/s.js"></script>
+</div>
+<!-- LIVE COUNTER END -->
+<script type="text/javascript">
+
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+
+  Tawk_API.onLoad = function(){
+
+    Tawk_API.showWidget();
+
+  };
+  </script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6af60c7fe84c933e6cc13678/1k78i1khn';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+  })();
+  </script>
+<!--End of Tawk.to Script-->
+<div id="imgModal" onclick="if(event.target===this)zatvoriSliku()">
+<div id="imgModalTop"><span id="imgModalTitle">Preview</span><a href="https://google.com" id="imgModalDrive" rel="noopener" target="_blank">📸 All Images (Google Drive)</a><button id="imgModalClose" onclick="zatvoriSliku()">✕ Close</button></div>
+<div id="imgModalWrap">
+<button class="modal-nav-btn" id="imgModalPrev" onclick="promijeniSliku(-1)" title="Previous" type="button">◀</button>
+<img alt="Preview" id="imgModalImg" src=""/>
+<button class="modal-nav-btn" id="imgModalNext" onclick="promijeniSliku(1)" title="Next" type="button">▶</button>
+</div>
+</div>
+
+<div id="gacha-fx"><div class="g-st"></div><div class="g-mt" style="top:6%;left:26%;animation-delay:0.5s"></div><div class="g-mt" style="top:18%;left:42%;animation-delay:2.4s"></div><div class="g-mt" style="top:12%;left:58%;animation-delay:4.2s"></div><div class="g-mt" style="top:28%;left:35%;animation-delay:6.0s"></div><div class="g-mt" style="top:8%;left:76%;animation-delay:1.6s"></div><div class="g-mt" style="top:22%;left:90%;animation-delay:3.5s"></div><div class="g-mt" style="top:34%;left:96%;animation-delay:5.3s"></div><div class="g-st" style="transform:scaleX(-1) scaleY(-1);animation-delay:2.2s;opacity:.75"></div><div class="g-sp" style="left:8.5%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:0.35s;animation-duration:7.6s"></div><div class="g-sp" style="left:16.3%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:1.0s;animation-duration:8.45s"></div><div class="g-sp" style="left:24.1%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:1.65s;animation-duration:9.299999999999999s"></div><div class="g-sp" style="left:31.9%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:2.3s;animation-duration:7.6s"></div><div class="g-sp" style="left:39.7%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:2.95s;animation-duration:8.45s"></div><div class="g-sp" style="left:47.5%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:3.6s;animation-duration:9.299999999999999s"></div><div class="g-sp" style="left:55.3%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:4.25s;animation-duration:7.6s"></div><div class="g-sp" style="left:63.1%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:4.9s;animation-duration:8.45s"></div><div class="g-sp" style="left:70.9%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:5.55s;animation-duration:9.299999999999999s"></div><div class="g-sp" style="left:78.7%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:6.2s;animation-duration:7.6s"></div><div class="g-sp" style="left:86.5%;width:3.5px;height:3.5px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:6.85s;animation-duration:8.45s"></div><div class="g-sp" style="left:94.3%;width:3.5px;height:3.5px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:7.5s;animation-duration:9.299999999999999s"></div><div class="g-sp" style="left:5.0%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:0.0s;animation-duration:7.2s"></div><div class="g-sp" style="left:12.8%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:0.65s;animation-duration:8.1s"></div><div class="g-sp" style="left:20.6%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:1.3s;animation-duration:9.0s"></div><div class="g-sp" style="left:28.4%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:1.95s;animation-duration:7.2s"></div><div class="g-sp" style="left:36.2%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:2.6s;animation-duration:8.1s"></div><div class="g-sp" style="left:44.0%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:3.25s;animation-duration:9.0s"></div><div class="g-sp" style="left:51.8%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:3.9s;animation-duration:7.2s"></div><div class="g-sp" style="left:59.6%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:4.55s;animation-duration:8.1s"></div><div class="g-sp" style="left:67.4%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:5.2s;animation-duration:9.0s"></div><div class="g-sp" style="left:75.2%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:5.85s;animation-duration:7.2s"></div><div class="g-sp" style="left:83.0%;width:4px;height:4px;background:#ffcc00;box-shadow:0 0 11px #ffcc00;animation-delay:6.5s;animation-duration:8.1s"></div><div class="g-sp" style="left:90.8%;width:4px;height:4px;background:#d946ef;box-shadow:0 0 11px #d946ef;animation-delay:7.15s;animation-duration:9.0s"></div></div>
+<script id="sa-modal-override">window.TRENUTNA_LISTA_SLIKA=[];window.TRENUTNI_INDEKS_SLIKE=0;window.prikaziTrenutnuSlikuModala=function(){if(!window.TRENUTNA_LISTA_SLIKA.length)return;var st=window.TRENUTNA_LISTA_SLIKA[window.TRENUTNI_INDEKS_SLIKE];var br=' ('+(window.TRENUTNI_INDEKS_SLIKE+1)+'/'+window.TRENUTNA_LISTA_SLIKA.length+')';document.getElementById('imgModalTitle').textContent=st.naziv+' - '+st.kat+br;document.getElementById('imgModalImg').src=st.url;var dr=document.getElementById('imgModalDrive');if(dr&&typeof DRIVE_LINKOVI!=='undefined'&&DRIVE_LINKOVI[st.naziv]){dr.href=DRIVE_LINKOVI[st.naziv];}var dr=document.getElementById('imgModalDrive');if(dr){dr.href=(st.naziv==='Account#2')?'https://drive.google.com/drive/u/0/folders/1GmE7FMuLVg1HHEBcQHJy4Qh71wOpcOq9':'https://google.com';}};window.promijeniSliku=function(d){if(!window.TRENUTNA_LISTA_SLIKA.length)return;var n=window.TRENUTNA_LISTA_SLIKA.length;window.TRENUTNI_INDEKS_SLIKE=(window.TRENUTNI_INDEKS_SLIKE+d+n)%n;window.prikaziTrenutnuSlikuModala();};window.otvoriKategoriju=function(naziv,kat,putanja,btn){var card=btn?btn.closest('.acc'):null;var im=card?card.querySelector('.img-crop-box img, img'):null;var src=(im?im.getAttribute('src'):putanja)||'';var ttl=(card&&card.querySelector('.acc-title span'))?card.querySelector('.acc-title span').textContent.trim():(naziv||'Account');var base=src.replace(/\?.*$/,'').replace(/\.(jpg|jpeg|png|webp)$/i,'');var lista=[];var done=0;for(var i=1;i<=20;i++){(function(n){var t=new Image();var u=base+'_'+n+'.jpg';t.onload=function(){lista[n-1]={naziv:ttl,kat:'Trainer & Pet #'+n,url:u};if(++done===20)fin();};t.onerror=function(){if(++done===20)fin();};t.src=u;})(i);}function fin(){var ok=lista.filter(Boolean);if(!ok.length){alert('Nema slika ('+base+'_1.jpg)');return;}window.TRENUTNA_LISTA_SLIKA=ok;window.TRENUTNI_INDEKS_SLIKE=0;window.prikaziTrenutnuSlikuModala();document.getElementById('imgModal').classList.add('open');}};document.addEventListener('click',function(e){var b=e.target.closest('.extra-img-btn');if(b){e.preventDefault();e.stopPropagation();window.otvoriKategoriju('','Trainer & Pet','',b);}if(e.target.closest('#imgModalPrev')){e.stopPropagation();window.promijeniSliku(-1);}if(e.target.closest('#imgModalNext')){e.stopPropagation();window.promijeniSliku(1);}},true);document.addEventListener('keydown',function(e){var m=document.getElementById('imgModal');if(!m||!m.classList.contains('open'))return;if(e.key==='ArrowLeft')window.promijeniSliku(-1);else if(e.key==='ArrowRight')window.promijeniSliku(1);});</script>
+<script id="sa-acc-stats-js">(function(){var STATS={'Account#24':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.38M',c:'gems'},{t:'⚔️ 548M 533k',c:'power'}],'Account#23':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.25M',c:'gems'},{t:'⚔️ 524M 663k',c:'power'}],'Account#22':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.34M',c:'gems'},{t:'⚔️ 543M 96k',c:'power'}],'Account#21':[{t:'🌍 World 8',c:''},{t:'Lv. 224',c:''},{t:'💎 Blue Gems 2.22M',c:'gems'},{t:'⚔️ 522M 93k',c:'power'}],'Account#20':[{t:'🌍 World 8',c:''},{t:'Lv. 224',c:''},{t:'💎 Blue Gems 2.26M',c:'gems'},{t:'⚔️ 529M 473k',c:'power'}],'Account#18':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.25M',c:'gems'},{t:'⚔️ 520M 116k',c:'power'}],'Account#17':[{t:'🌍 World 8',c:''},{t:'Lv. 224',c:''},{t:'💎 Blue Gems 2.25M',c:'gems'},{t:'⚔️ 542M 368k',c:'power'}],'Account#16':[{t:'🌍 World 8',c:''},{t:'Lv. 224',c:''},{t:'💎 Blue Gems 2.29M',c:'gems'},{t:'⚔️ 494M 791k',c:'power'}],'Account#14':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.29M',c:'gems'},{t:'⚔️ 512M 502k',c:'power'}],'Account#13':[{t:'🌍 World 8',c:''},{t:'Lv. 224',c:''},{t:'💎 Blue Gems 2.22M',c:'gems'},{t:'⚔️ 492M 655k',c:'power'}],'Account#12':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.19M',c:'gems'},{t:'⚔️ 489M 816k',c:'power'}],'Account#11':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.2M',c:'gems'},{t:'⚔️ 484M 865k',c:'power'}],'Account#10':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.2M',c:'gems'},{t:'⚔️ 489M 797k',c:'power'}],'Account#9':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.25M',c:'gems'},{t:'⚔️ 507M 24k',c:'power'}],'Account#8':[{t:'🌍 World 8',c:''},{t:'Lv. 227',c:''},{t:'💎 Blue Gems 2.36M',c:'gems'},{t:'⚔️ 541M 613k',c:'power'}],'Account#7':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.29M',c:'gems'},{t:'⚔️ 534M 58k',c:'power'}],'Account#6':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.27M',c:'gems'},{t:'⚔️ 527M 645k',c:'power'}],'Account#5':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.34M',c:'gems'},{t:'⚔️ 534M 519k',c:'power'}],'Account#4':[{t:'🌍 World 8',c:''},{t:'Lv. 225',c:''},{t:'💎 Blue Gems 2.28M',c:'gems'},{t:'⚔️ 524M 558k',c:'power'}],'Account#2':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.19M',c:'gems'},{t:'⚔️ 491M 522k',c:'power'}],'Account#1':[{t:'🌍 World 8',c:''},{t:'Lv. 223',c:''},{t:'💎 Blue Gems 2.27M',c:'gems'},{t:'⚔️ 533M 406k',c:'power'}]};function ins(){document.querySelectorAll('#accounts .acc').forEach(function(card){if(card.querySelector('.acc-stats-bar'))return;var sp=card.querySelector('.acc-title span');var nm=sp?sp.textContent.trim():'';var list=STATS[nm];if(!list)return;var bar=document.createElement('div');bar.className='acc-stats-bar';list.forEach(function(it){var b=document.createElement('span');b.className='acc-stat-pill '+it.c;b.textContent=it.t;bar.appendChild(b);});var ttl=card.querySelector('.acc-title');if(ttl&&ttl.nextSibling)card.insertBefore(bar,ttl.nextSibling);else card.prepend(bar);});}setTimeout(ins,80);window.addEventListener('load',ins);})();</script>
+<script id="sa-modal-close-anywhere">document.addEventListener('click',function(e){var m=document.getElementById('imgModal');if(!m||!m.classList.contains('open'))return;if(e.target.closest('#imgModalImg, #imgModalPrev, #imgModalNext, #imgModalTop, .extra-img-btn'))return;if(e.target.closest('#imgModal')){m.classList.remove('open');}});</script>
+<script id="sa-modal-drive-sync">
+window.SVI_DRIVE_LINKOVI = {
+  "Account#1": "https://drive.google.com/drive/u/0/folders/1Gi_46QFegNGeQOuIkxVeSifVY-oZ8GvV",
+  "Account#2": "https://drive.google.com/drive/u/0/folders/1GmE7FMuLVg1HHEBcQHJy4Qh71wOpcOq9",
+  "Account#4": "https://drive.google.com/drive/u/0/folders/1YG48vpU3Xg-58lY5u-VNgtioVgie35P7",
+  "Account#5": "https://drive.google.com/drive/u/0/folders/148bDThfeqgY-Xt63Bat0zoOtM5vzg3Yl",
+  "Account#6": "https://drive.google.com/drive/u/0/folders/1pdxRNgESfimdMG0-M1qlY3kY3r6470Gk",
+  "Account#7": "https://drive.google.com/drive/u/0/folders/1GLw6DWEcde2sybWQWTYXhPF0_UskP2ZC",
+  "Account#8": "https://drive.google.com/drive/u/0/folders/1PtCoVWq73WvyQ_CeqyMORKVx3y1CebjF",
+  "Account#9": "https://drive.google.com/drive/u/0/folders/1VoehpoKQU94bTOvTnIP9a2yXOKwqJyVN",
+  "Account#10": "https://drive.google.com/drive/u/0/folders/12o8WUe0Ydv0lQUvzsEQAmogThn9_Vlzs",
+  "Account#11": "https://drive.google.com/drive/u/0/folders/1McXeEXmoHk95vr2QnDXqgWgYWfdIyRLY",
+  "Account#12": "https://drive.google.com/drive/u/0/folders/1lVgDEMXSbzCButTVQ_6K7EJm_feWc9tV",
+  "Account#13": "https://drive.google.com/drive/u/0/folders/1h0vRukx1MReGhjMdrd95X3FWaGtog2gh",
+  "Account#14": "https://drive.google.com/drive/u/0/folders/1bOHRRcoKvTodYHD8Ry2Hx35XudKAoL2y",
+  "Account#16": "https://drive.google.com/drive/u/0/folders/19ooP_r-MhQjIOuEIAldxPodp3GMiuw9k",
+  "Account#17": "https://drive.google.com/drive/u/0/folders/1R_wgNg-FHoxiQTcu8qS9GqQrm_gNw6cM",
+  "Account#18": "https://drive.google.com/drive/u/0/folders/19mvqXWBVRhXrEDi5pRUNwl80mbKs-Gy0",
+  "Account#20": "https://drive.google.com/drive/u/0/folders/1LTSDd-vm0L0LdN8-sTc0xnmf9lkTrnXd",
+  "Account#21": "https://drive.google.com/drive/u/0/folders/1dxb2msG2L_naLiApB9yDP4QEqRDKiUjO",
+  "Account#22": "https://drive.google.com/drive/u/0/folders/1Pb-VKrHCCviKvgHob4O7nGmiabuJGhN1",
+  "Account#23": "https://drive.google.com/drive/u/0/folders/10QDLCm7LkZVXiTueJCOf1n3z2jUK8k2R",
+  "Account#24": "https://drive.google.com/drive/u/0/folders/1SGSA4EhkRUb1-uGge6MV4atnYvrk7trJ"
+};
+
+function nadjiDriveUrl(tekst) {
+  if (!tekst) return "";
+  var m = tekst.match(/Account\s*#?\s*(\d+)/i);
+  if (!m) return "";
+  return window.SVI_DRIVE_LINKOVI["Account#" + m[1]] || "";
+}
+
+function osvjeziKarticeDrive() {
+  document.querySelectorAll("#accounts .acc").forEach(function(card) {
+    var sp = card.querySelector(".acc-title span");
+    var url = nadjiDriveUrl(sp ? sp.textContent : "");
+    var btn = card.querySelector(".drive-btn");
+    if (btn && url) {
+      btn.href = url;
+      btn.setAttribute("href", url);
+    }
+  });
+}
+
+osvjeziKarticeDrive();
+setTimeout(osvjeziKarticeDrive, 100);
+setTimeout(osvjeziKarticeDrive, 500);
+var accContainer = document.getElementById("accounts");
+if (accContainer && window.MutationObserver) {
+  new MutationObserver(osvjeziKarticeDrive).observe(accContainer, { childList: true, subtree: true });
+}
+
+var origPrikazi = window.prikaziTrenutnuSlikuModala;
+window.prikaziTrenutnuSlikuModala = function() {
+  if (typeof origPrikazi === "function") origPrikazi();
+  var st = (window.TRENUTNA_LISTA_SLIKA || [])[window.TRENUTNI_INDEKS_SLIKE || 0];
+  var url = st ? nadjiDriveUrl(st.naziv) : "";
+  var dr = document.getElementById("imgModalDrive");
+  if (dr && url) {
+    dr.href = url;
+    dr.setAttribute("href", url);
+    dr.style.display = "inline-flex";
+  }
+};
+</script>
+</body>
+</html>
